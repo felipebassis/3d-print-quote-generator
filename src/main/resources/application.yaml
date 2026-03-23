@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: 3d-print-quote-generator
