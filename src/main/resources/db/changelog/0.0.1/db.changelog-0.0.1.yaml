@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-CREATE-TABLE-LEADER-LOCK
+      author: 'Felipe Assis'
+      changes:
+        - sqlFile:
+            path: CREATE_LEADER_LOCK.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: DROP_LEADER_LOCK.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 002-CREATE-TABLE-INSTANCE
+      author: 'Felipe Assis'
+      changes:
+        - sqlFile:
+            path: CREATE_INSTANCE.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: DROP_INSTANCE.sql
+            relativeToChangelogFile: true

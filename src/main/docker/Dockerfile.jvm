@@ -82,8 +82,15 @@
 ###
 FROM registry.access.redhat.com/ubi9/openjdk-25-runtime:1.24
 
-ENV LANGUAGE='en_US:en'
+WORKDIR /work/
 
+ENV LANGUAGE='en_US:en'
+ENV DB_PATH="/var/lib/data/quote-generator/db"
+
+USER root
+RUN mkdir -p $DB_PATH /var/lib/data/quote-generator && \
+    chown -R 185:0 /var/lib/data/quote-generator && \
+    chmod -R 775 /var/lib/data/quote-generator
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
