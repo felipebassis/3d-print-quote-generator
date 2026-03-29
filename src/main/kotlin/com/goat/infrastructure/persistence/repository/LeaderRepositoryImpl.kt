@@ -1,6 +1,5 @@
-package com.goat.infrastructure.election.jpa.repository
+package com.goat.infrastructure.persistence.repository
 
-import com.goat.infrastructure.Constants
 import com.goat.infrastructure.Constants.INSTANCE_ID
 import com.goat.infrastructure.Constants.LEADER_DURATION
 import jakarta.inject.Singleton

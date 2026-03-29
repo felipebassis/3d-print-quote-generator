@@ -1,11 +1,11 @@
-package com.goat.infrastructure.election.scheduler
+package com.goat.infrastructure.scheduler
 
-import com.goat.infrastructure.election.jpa.repository.LeaderRepository
+import com.goat.infrastructure.persistence.repository.LeaderRepository
 import com.goat.infrastructure.extensions.Loggable
 import io.quarkus.scheduler.Scheduled
-import jakarta.inject.Singleton
+import jakarta.enterprise.context.ApplicationScoped
 
-@Singleton
+@ApplicationScoped
 internal class LeaderElectionScheduler(
     private val leaderRepository: LeaderRepository,
 ) : Loggable {

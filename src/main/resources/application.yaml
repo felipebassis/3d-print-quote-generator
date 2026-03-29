@@ -1,10 +1,11 @@
-database-path: ${DB_PATH:${user.home}/.quote-generator/db}
-
 quarkus:
+  http:
+    limits:
+      max-body-size: 5G
   datasource:
     db-kind: sqlite
     jdbc:
-      url: jdbc:sqlite:${database-path}/tasks.db?journal_mode=WAL&busy_timeout=1&synchronous=NORMAL
+      url: jdbc:sqlite:${file-system.database-path}/quote-generator.db?journal_mode=WAL&busy_timeout=1&synchronous=NORMAL
       min-size: 1
       max-size: 1
       initial-size: 1
@@ -15,15 +16,22 @@ quarkus:
   hibernate-orm:
     dialect: org.hibernate.community.dialect.SQLiteDialect
     log:
-      sql: true
+      sql: false
       format-sql: true
   liquibase:
     migrate-at-start: true
     change-log: db/changelog/db.changelog-master.yaml
     contexts: all
-    validate-on-migrate: true
   log:
     level: INFO
     category:
       "com.goat":
         level: DEBUG
+
+file-system:
+  stl-file-directory: ${STL_DIRECTORY_BASE:${user.home}/.quote-generator/stl}
+  database-path: ${DB_PATH:${user.home}/.quote-generator/db}
+
+slicer:
+  path: ${SLICER_PATH}
+  config: ${SLICER_CONFIG}

@@ -1,8 +1,8 @@
-package com.goat.infrastructure.election.jpa.repository
+package com.goat.infrastructure.persistence.repository
 
 import com.goat.infrastructure.Constants.INSTANCE_ID
-import com.goat.infrastructure.election.jpa.entity.InstanceEntity
-import com.goat.infrastructure.election.jpa.entity.InstanceStatus
+import com.goat.infrastructure.persistence.enums.InstanceStatus
+import com.goat.infrastructure.persistence.entity.InstanceEntity
 import jakarta.inject.Singleton
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
@@ -22,10 +22,12 @@ internal class InstanceRepositoryImpl(
         entityManager.createQuery(
             """
                 UPDATE InstanceEntity i SET 
-                    i.lastHeartbeat = :now
+                    i.lastHeartbeat = :now,
+                    i.status = :activeStatus
                 WHERE i.instanceId = :instanceId
             """.trimIndent()
         ).setParameter("instanceId", INSTANCE_ID)
+            .setParameter("activeStatus", InstanceStatus.ALIVE)
             .setParameter("now", LocalDateTime.now())
             .executeUpdate()
     }
@@ -47,8 +49,19 @@ internal class InstanceRepositoryImpl(
         entityManager.createQuery(
             """
             SELECT i FROM InstanceEntity i 
-                WHERE i.status <> com.goat.infrastructure.election.jpa.entity.InstanceStatus.DEAD
+                WHERE i.status <> :dead
                 ORDER BY i.id
         """.trimIndent(), InstanceEntity::class.java
-        ).resultList
+        ).setParameter("dead", InstanceStatus.DEAD)
+            .resultList
+
+    override fun findAllInstances(): List<InstanceEntity> =
+        entityManager.createQuery(
+            """
+                SELECT i FROM InstanceEntity i 
+                WHERE i.status = :status 
+                ORDER BY i.id 
+            """.trimIndent(), InstanceEntity::class.java
+        ).setParameter("status", InstanceStatus.ALIVE)
+            .resultList
 }

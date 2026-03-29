@@ -1,4 +1,4 @@
-package com.goat.infrastructure.election.jpa.entity
+package com.goat.infrastructure.persistence.entity
 
 import jakarta.persistence.*
 import java.time.LocalDateTime

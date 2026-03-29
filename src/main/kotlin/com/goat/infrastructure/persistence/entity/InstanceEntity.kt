@@ -1,5 +1,6 @@
-package com.goat.infrastructure.election.jpa.entity
+package com.goat.infrastructure.persistence.entity
 
+import com.goat.infrastructure.persistence.enums.InstanceStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -28,7 +29,3 @@ class InstanceEntity(
     @Column(name = "status", nullable = false)
     var status: InstanceStatus = InstanceStatus.ALIVE,
 )
-
-enum class InstanceStatus {
-    ALIVE, DEAD, SHUTTING_DOWN
-}

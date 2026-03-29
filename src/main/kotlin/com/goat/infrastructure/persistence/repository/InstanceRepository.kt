@@ -1,6 +1,6 @@
-package com.goat.infrastructure.election.jpa.repository
+package com.goat.infrastructure.persistence.repository
 
-import com.goat.infrastructure.election.jpa.entity.InstanceEntity
+import com.goat.infrastructure.persistence.entity.InstanceEntity
 
 interface InstanceRepository {
 
@@ -8,4 +8,5 @@ interface InstanceRepository {
     fun updateHeartBeat()
     fun markAsShuttingDown()
     fun findAllNotDead(): List<InstanceEntity>
+    fun findAllInstances(): List<InstanceEntity>
 }

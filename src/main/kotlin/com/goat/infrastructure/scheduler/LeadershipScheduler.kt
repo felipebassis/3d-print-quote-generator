@@ -1,19 +1,21 @@
-package com.goat.infrastructure.election.scheduler
+package com.goat.infrastructure.scheduler
 
 import com.goat.infrastructure.Constants.LAST_ALLOWED_HEARTBEAT_DURATION
-import com.goat.infrastructure.election.jpa.entity.InstanceStatus
-import com.goat.infrastructure.election.jpa.repository.InstanceRepository
-import com.goat.infrastructure.election.jpa.repository.LeaderRepository
+import com.goat.infrastructure.persistence.enums.InstanceStatus
+import com.goat.infrastructure.persistence.repository.InstanceRepository
+import com.goat.infrastructure.persistence.repository.LeaderRepository
 import com.goat.infrastructure.extensions.Loggable
+import com.goat.infrastructure.persistence.repository.TaskRepository
 import io.quarkus.scheduler.Scheduled
-import jakarta.inject.Singleton
+import jakarta.enterprise.context.ApplicationScoped
 import jakarta.transaction.Transactional
 import java.time.LocalDateTime
 
-@Singleton
+@ApplicationScoped
 internal class LeadershipScheduler(
     private val leaderRepository: LeaderRepository,
     private val instanceRepository: InstanceRepository,
+    private val taskRepository: TaskRepository,
 ) : Loggable {
 
     @Scheduled(every = "15s")
@@ -30,17 +32,18 @@ internal class LeadershipScheduler(
                         )
             }
             if (deadInstances.isNotEmpty()) {
-                logger.warn(
+                logger.debug(
                     "Instances {} are not running anymore. Redistributing pending tasks to running instances.",
                     deadInstances.joinToString(", ") { it.instanceId }
                 )
                 deadInstances.forEach {
                     it.status = InstanceStatus.DEAD
                     instanceRepository.save(it)
+                    taskRepository.redistributeForInstance(it.instanceId)
                 }
-                TODO("Implementar rebalanceamento de tarefas")
+                logger.debug("Tasks rebalanced.")
             } else {
-                logger.info("All instances are running.")
+                logger.debug("All instances are running.")
             }
         } else {
             logger.debug("I'm not the leader, this is not my job.")

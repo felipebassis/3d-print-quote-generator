@@ -21,3 +21,25 @@ databaseChangeLog:
         - sqlFile:
             path: DROP_INSTANCE.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 003-CREATE-TABLE-CUSTOMER
+      author: 'Felipe Assis'
+      changes:
+        - sqlFile:
+            path: CREATE_CUSTOMER.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: DROP_CUSTOMER.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 004-CREATE-TASK
+      author: 'Felipe Assis'
+      changes:
+        - sqlFile:
+            path: CREATE_TASK.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: DROP_TASK.sql
+            relativeToChangelogFile: true

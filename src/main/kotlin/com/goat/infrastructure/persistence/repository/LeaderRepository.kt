@@ -1,4 +1,4 @@
-package com.goat.infrastructure.election.jpa.repository
+package com.goat.infrastructure.persistence.repository
 
 interface LeaderRepository {
 
