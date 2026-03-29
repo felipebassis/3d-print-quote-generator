@@ -1,5 +1,6 @@
 package com.goat.infrastructure.generator
 
+import com.goat.domain.port.GCodeGenerator
 import com.goat.infrastructure.extensions.Loggable
 import jakarta.enterprise.context.ApplicationScoped
 import org.eclipse.microprofile.config.inject.ConfigProperty
@@ -14,12 +15,12 @@ import kotlin.io.path.notExists
 import kotlin.io.path.toPath
 
 @ApplicationScoped
-class GCodeGenerator(
+internal class OrcaSlicerGCodeGenerator(
     @ConfigProperty(name = "slicer.path")
     slicerPath: Optional<String>,
     @ConfigProperty(name = "slicer.config")
     slicerConfig: Optional<String>,
-) : Loggable {
+) : GCodeGenerator, Loggable {
 
     private val slicerPath = Path(
         slicerPath.orElse(
@@ -60,7 +61,7 @@ class GCodeGenerator(
     }
 
 
-    fun generateGCode(stlFile: Path, stlDirectory: Path) {
+    override fun generateGCode(stlFile: Path, stlDirectory: Path) {
         val outputFile = File("$stlDirectory/${stlFile.fileName}.3mf")
         outputFile.createNewFile()
         logger.debug("Starting Orca-Slicer process for stl {}", stlFile.fileName)

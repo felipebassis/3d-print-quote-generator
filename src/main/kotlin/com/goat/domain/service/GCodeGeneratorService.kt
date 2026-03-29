@@ -2,7 +2,7 @@ package com.goat.domain.service
 
 import com.goat.domain.usecase.GCodeGeneratorUseCase
 import com.goat.infrastructure.extensions.Loggable
-import com.goat.infrastructure.generator.GCodeGenerator
+import com.goat.infrastructure.generator.OrcaSlicerGCodeGenerator
 import com.goat.infrastructure.persistence.repository.FileRepository
 import jakarta.enterprise.context.ApplicationScoped
 import java.nio.file.Path
@@ -12,7 +12,7 @@ import kotlin.time.measureTime
 @ApplicationScoped
 internal class GCodeGeneratorService(
     private val fileRepository: FileRepository,
-    private val gCodeGenerator: GCodeGenerator,
+    private val gCodeGenerator: OrcaSlicerGCodeGenerator,
 ) : GCodeGeneratorUseCase, Loggable {
 
     override fun generateGCode(stlDirectoryPath: Path) {
