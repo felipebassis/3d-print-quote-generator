@@ -10,7 +10,9 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.EntityManager
 import jakarta.transaction.Transactional
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
+import kotlin.io.path.Path
+import kotlin.io.path.absolutePathString
 
 @ApplicationScoped
 internal class TaskRepositoryImpl(
@@ -29,7 +31,7 @@ internal class TaskRepositoryImpl(
                     it.processingInstance = task.processingInstance
                 } ?: TaskEntity(
                 id = task.id.toString(),
-                stlDirectory = task.stlDirectory,
+                stlDirectory = task.stlDirectory.absolutePathString(),
                 attempts = task.attempts,
                 status = task.status,
                 createdAt = task.createdAt,
@@ -66,7 +68,7 @@ internal class TaskRepositoryImpl(
             .map {
                 Task(
                     id = UUID.fromString(it.id),
-                    stlDirectory = it.stlDirectory,
+                    stlDirectory = Path(it.stlDirectory),
                     createdAt = it.createdAt,
                     attempts = it.attempts,
                     status = it.status,

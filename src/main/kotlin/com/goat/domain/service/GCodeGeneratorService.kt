@@ -1,8 +1,9 @@
 package com.goat.domain.service
 
+import com.goat.domain.port.GCodeGenerator
 import com.goat.domain.usecase.GCodeGeneratorUseCase
 import com.goat.infrastructure.extensions.Loggable
-import com.goat.infrastructure.generator.OrcaSlicerGCodeGenerator
+import com.goat.infrastructure.persistence.enums.FileType
 import com.goat.infrastructure.persistence.repository.FileRepository
 import jakarta.enterprise.context.ApplicationScoped
 import java.nio.file.Path
@@ -12,11 +13,11 @@ import kotlin.time.measureTime
 @ApplicationScoped
 internal class GCodeGeneratorService(
     private val fileRepository: FileRepository,
-    private val gCodeGenerator: OrcaSlicerGCodeGenerator,
+    private val gCodeGenerator: GCodeGenerator,
 ) : GCodeGeneratorUseCase, Loggable {
 
     override fun generateGCode(stlDirectoryPath: Path) {
-        val stlFiles = fileRepository.findAllFiles(stlDirectoryPath)
+        val stlFiles = fileRepository.findAllFiles(stlDirectoryPath, FileType.MODELS)
 
         logger.info("Beginning G-code generation for {} file(s)", stlFiles.size)
         stlFiles.forEach { this.generateGCode(it, stlDirectoryPath) }

@@ -1,6 +1,6 @@
 package com.goat.domain.exception
 
-class GCodeGeneratorException(
+class QuoteGeneratorException(
     message: String,
     cause: Throwable? = null,
 ) : TaskStepException(message, cause)

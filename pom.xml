@@ -17,6 +17,7 @@
         <quarkus.platform.version>3.32.4</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.4</surefire-plugin.version>
+        <open-pdf.version>3.0.3</open-pdf.version>
     </properties>
 
     <dependencyManagement>
@@ -115,6 +116,16 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>kotlin-extensions</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf</artifactId>
+            <version>${open-pdf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.librepdf</groupId>
+            <artifactId>openpdf-html</artifactId>
+            <version>${open-pdf.version}</version>
         </dependency>
     </dependencies>
 

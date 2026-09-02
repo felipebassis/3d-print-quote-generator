@@ -55,7 +55,8 @@ class QuoteRequestDTO {
     var customerEmail: String? = null
 
     @RestForm("customer-zip-code")
-    var customerZipCode: String? = null
+    @NotEmpty(message = "Customer Zip Code is mandatory.")
+    var customerZipCode: String = ""
 
     @RestForm("stl-files")
     @Size(min = 1, message = "At least 1 file should be uploaded.")

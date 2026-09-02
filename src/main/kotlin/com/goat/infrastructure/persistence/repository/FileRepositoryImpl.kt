@@ -1,5 +1,6 @@
 package com.goat.infrastructure.persistence.repository
 
+import com.goat.infrastructure.persistence.enums.FileType
 import jakarta.enterprise.context.ApplicationScoped
 import org.eclipse.microprofile.config.inject.ConfigProperty
 import org.jboss.resteasy.reactive.multipart.FileUpload
@@ -22,10 +23,10 @@ internal class FileRepositoryImpl(
     override fun save(taskId: UUID, files: List<FileUpload>): Path {
         val taskStlDirectory = Paths.get(stlFile.absolutePathString(), taskId.toString())
         Files.createDirectories(taskStlDirectory)
-        files.forEachIndexed { index, file ->
-            val persistedFile = taskStlDirectory.resolve("stl-${file.fileName()}-$index.stl")
-            if (file.filePath() != null) {
-                Files.copy(file.filePath(), persistedFile)
+        files.forEach {
+            val persistedFile = taskStlDirectory.resolve("${it.fileName()}.stl")
+            if (it.filePath() != null) {
+                Files.copy(it.filePath(), persistedFile)
             } else {
                 throw IllegalStateException("File path is null.")
             }
@@ -33,18 +34,16 @@ internal class FileRepositoryImpl(
         return taskStlDirectory
     }
 
-    override fun findAllFiles(stlDirectory: Path): List<Path> {
-        if (stlDirectory.exists()) {
-            val stlFiles = Files.walk(stlDirectory)
-                .filter {
-                    it.toFile().extension == "stl"
-                }
+    override fun findAllFiles(directory: Path, fileType: FileType): List<Path> {
+        if (directory.exists()) {
+            val files = Files.walk(directory)
+                .filter(fileType::isCompatible)
                 .toList()
-            if (stlFiles.isEmpty()) {
-                throw IllegalStateException("Stl directory '${stlDirectory.absolutePathString()}' is empty.")
+            if (files.isEmpty()) {
+                throw IllegalStateException("Directory '${directory.absolutePathString()}' is empty.")
             }
-            return stlFiles
+            return files
         }
-        throw IllegalStateException("Stl directory '${stlDirectory.absolutePathString()}' does not exist.")
+        throw IllegalStateException("Directory '${directory.absolutePathString()}' does not exist.")
     }
 }

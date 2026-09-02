@@ -18,7 +18,7 @@ internal class LeadershipScheduler(
     private val taskRepository: TaskRepository,
 ) : Loggable {
 
-    @Scheduled(every = "15s")
+    @Scheduled(every = "15s", delayed = "15s")
     @Transactional(Transactional.TxType.REQUIRED)
     fun checkRunningInstances() =
         if (leaderRepository.isCurrentLeader()) {

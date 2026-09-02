@@ -10,7 +10,7 @@ internal class LeaderElectionScheduler(
     private val leaderRepository: LeaderRepository,
 ) : Loggable {
 
-    @Scheduled(every = "5s")
+    @Scheduled(every = "5s", delayed = "15s")
     fun beginElection() {
         val isCurrentLeader = leaderRepository.updateToCurrentLeader()
         if (isCurrentLeader) {
