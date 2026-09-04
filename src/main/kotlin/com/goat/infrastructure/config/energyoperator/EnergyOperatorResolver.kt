@@ -1,6 +1,6 @@
 package com.goat.infrastructure.config.energyoperator
 
-import com.goat.infrastructure.config.energyoperator.bra.BrazilianEnergyOperator
+import com.goat.infrastructure.config.energyoperator.br.BrazilianEnergyOperator
 import java.util.Locale
 
 object EnergyOperatorResolver {

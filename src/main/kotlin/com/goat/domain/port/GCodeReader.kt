@@ -5,5 +5,5 @@ import java.nio.file.Path
 
 interface GCodeReader {
 
-    fun extractPrintingInfo(gcodeFile: Path): PrintInfo
+    fun extractPrintingInfo(gcodeFile: Path): List<PrintInfo>
 }

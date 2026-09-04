@@ -27,10 +27,14 @@ quarkus:
     category:
       "com.goat":
         level: DEBUG
+  rest-client:
+    aneel:
+      url: https://dadosabertos.aneel.gov.br
 
 file-system:
-  stl-file-directory: ${STL_DIRECTORY_BASE:${user.home}/.quote-generator/stl}
+  file-directory: ${STL_DIRECTORY_BASE:${user.home}/.quote-generator/files}
   database-path: ${DB_PATH:${user.home}/.quote-generator/db}
+  template-path: ${TEMPLATE_PATH:${user.home}/.quote-generator/templates}
 
 slicer:
   path: ${SLICER_PATH}

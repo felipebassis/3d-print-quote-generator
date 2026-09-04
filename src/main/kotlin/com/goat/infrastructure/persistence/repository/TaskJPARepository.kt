@@ -15,7 +15,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 
 @ApplicationScoped
-internal class TaskRepositoryImpl(
+internal class TaskJPARepository(
     private val entityManager: EntityManager,
 ) : TaskRepository {
 

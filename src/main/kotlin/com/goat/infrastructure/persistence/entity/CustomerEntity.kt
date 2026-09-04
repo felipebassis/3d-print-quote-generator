@@ -23,5 +23,5 @@ class CustomerEntity(
     val customerEmail: String?,
 
     @Column(name = "customer_zip_code")
-    val customerZipCode: String?,
+    val customerZipCode: String,
 )

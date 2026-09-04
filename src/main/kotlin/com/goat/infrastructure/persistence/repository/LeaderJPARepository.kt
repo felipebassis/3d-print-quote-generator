@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional
 import java.time.LocalDateTime
 
 @Singleton
-internal class LeaderRepositoryImpl(
+internal class LeaderJPARepository(
     private val entityManager: EntityManager
 ) : LeaderRepository {
 

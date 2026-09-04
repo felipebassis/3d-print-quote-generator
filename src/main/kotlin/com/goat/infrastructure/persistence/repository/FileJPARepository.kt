@@ -3,7 +3,7 @@ package com.goat.infrastructure.persistence.repository
 import com.goat.infrastructure.persistence.enums.FileType
 import jakarta.enterprise.context.ApplicationScoped
 import org.eclipse.microprofile.config.inject.ConfigProperty
-import org.jboss.resteasy.reactive.multipart.FileUpload
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -11,27 +11,24 @@ import java.util.*
 import kotlin.io.path.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.exists
+import kotlin.io.path.extension
 
 @ApplicationScoped
-internal class FileRepositoryImpl(
-    @ConfigProperty(name = "file-system.stl-file-directory")
-    stlFileDirectory: String,
+internal class FileJPARepository(
+    @ConfigProperty(name = "file-system.file-directory")
+    fileDirectory: String,
 ) : FileRepository {
 
-    private val stlFile: Path = Path(stlFileDirectory)
+    private val files: Path = Path(fileDirectory)
 
-    override fun save(taskId: UUID, files: List<FileUpload>): Path {
-        val taskStlDirectory = Paths.get(stlFile.absolutePathString(), taskId.toString())
-        Files.createDirectories(taskStlDirectory)
+    override fun save(taskId: UUID, files: List<Path>): Path {
+        val taskDirectory = Paths.get(this.files.absolutePathString(), taskId.toString())
+        Files.createDirectories(taskDirectory)
         files.forEach {
-            val persistedFile = taskStlDirectory.resolve("${it.fileName()}.stl")
-            if (it.filePath() != null) {
-                Files.copy(it.filePath(), persistedFile)
-            } else {
-                throw IllegalStateException("File path is null.")
-            }
+            val persistedFile = taskDirectory.resolve("${it.fileName}.${it.extension}")
+            Files.copy(it, persistedFile)
         }
-        return taskStlDirectory
+        return taskDirectory
     }
 
     override fun findAllFiles(directory: Path, fileType: FileType): List<Path> {

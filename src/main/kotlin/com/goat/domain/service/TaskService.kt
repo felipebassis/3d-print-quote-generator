@@ -9,7 +9,6 @@ import com.goat.infrastructure.persistence.repository.TaskRepository
 import com.goat.infrastructure.web.controller.QuoteRequestDTO
 import jakarta.enterprise.context.ApplicationScoped
 import java.util.UUID
-import kotlin.io.path.absolutePathString
 
 @ApplicationScoped
 internal class TaskService(
@@ -21,7 +20,9 @@ internal class TaskService(
     override fun createTaskForGeneratingQuote(quoteRequestDTO: QuoteRequestDTO) {
         logger.info("Creating task for generation of a Quote: $quoteRequestDTO")
         val taskId = UUID.randomUUID()
-        val stlDirectory = fileRepository.save(taskId, quoteRequestDTO.stlFiles)
+        val stlDirectory = fileRepository.save(taskId, quoteRequestDTO.stlFiles.map {
+            it.filePath()
+        })
         taskRepository.save(Task(
             id = taskId,
             stlDirectory = stlDirectory,

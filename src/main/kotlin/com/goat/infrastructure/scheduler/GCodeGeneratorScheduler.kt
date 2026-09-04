@@ -10,6 +10,7 @@ import com.goat.infrastructure.persistence.repository.InstanceRepository
 import com.goat.infrastructure.persistence.repository.TaskRepository
 import io.quarkus.scheduler.Scheduled
 import jakarta.enterprise.context.ApplicationScoped
+import org.slf4j.MDC
 import kotlin.io.path.Path
 
 @ApplicationScoped
@@ -31,28 +32,28 @@ internal class GCodeGeneratorScheduler(
 
         currentTask.status = currentTask.status.next()
 
-        try {
-            gCodeGeneratorUseCase.generateGCode(currentTask.stlDirectory)
-            currentTask.attempts = 1
-            logger.info("G-code generated successfully for task {}", currentTask.id)
-        } catch (exception: GCodeGeneratorException) {
-            logger.error("Error while attempting to generate G-code for task {}.", currentTask.id, exception)
-            currentTask.lastError = exception.message
-            currentTask.attempts += 1
-        } catch (exception: Exception) {
-            logger.error(
-                "Unexpected error while generating G-code for task {}. Task will not be reprocessed.",
-                currentTask.id,
-                exception
-            )
-            currentTask.lastError = exception.message
-            currentTask.status = currentTask.status.toError()
-        } finally {
-            logger.debug("Finished processing G-code generation for task {}", currentTask.id)
-            currentTask.processingInstance = Constants.INSTANCE_ID
-            currentTask.status = currentTask.status.next()
-            taskRepository.save(currentTask)
+        MDC.putCloseable("taskId", currentTask.id.toString()).use {
+            try {
+                gCodeGeneratorUseCase.generateGCode(currentTask.stlDirectory)
+                currentTask.attempts = 1
+                logger.info("G-code generated successfully")
+            } catch (exception: GCodeGeneratorException) {
+                logger.error("Error while attempting to generate G-code.", exception)
+                currentTask.lastError = exception.message
+                currentTask.attempts += 1
+            } catch (exception: Exception) {
+                logger.error(
+                    "Unexpected error while generating G-code. Task will not be reprocessed.",
+                    exception
+                )
+                currentTask.lastError = exception.message
+                currentTask.status = currentTask.status.toError()
+            } finally {
+                logger.debug("Finished processing G-code generation")
+                currentTask.processingInstance = Constants.INSTANCE_ID
+                currentTask.status = currentTask.status.next()
+                taskRepository.save(currentTask)
+            }
         }
-
     }
 }

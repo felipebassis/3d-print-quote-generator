@@ -1,4 +1,4 @@
-package com.goat.infrastructure.config.energyoperator.bra
+package com.goat.infrastructure.config.energyoperator.br
 
 import com.goat.infrastructure.config.energyoperator.EnergyOperator
 import com.goat.infrastructure.extensions.Locales
@@ -116,4 +116,5 @@ enum class BrazilianEnergyOperator(
             entries.firstOrNull { it.operatorName == operatorName }
                 ?: throw IllegalArgumentException("Unknown energy operator: $operatorName")
     }
+
 }

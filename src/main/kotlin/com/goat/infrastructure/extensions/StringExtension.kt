@@ -7,7 +7,7 @@ fun String?.toDuration(): Duration? {
 
     var seconds = 0L
 
-    val pattern = Regex("(\\d+)([hms])")
+    val pattern = Regex("(\\d+)([dhms])")
 
     pattern.findAll(this).forEach { match ->
         val value = match.groupValues[1].toLong()

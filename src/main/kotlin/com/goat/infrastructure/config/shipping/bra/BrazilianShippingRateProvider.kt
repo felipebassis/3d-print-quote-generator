@@ -1,6 +1,5 @@
 package com.goat.infrastructure.config.shipping.bra
 
-import com.goat.infrastructure.config.energyoperator.bra.BrazilianEnergyOperator
 import com.goat.infrastructure.config.shipping.ShippingRateProvider
 import com.goat.infrastructure.extensions.Locales
 import java.util.Locale

@@ -43,3 +43,14 @@ databaseChangeLog:
         - sqlFile:
             path: DROP_TASK.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 005-CREATE-ENERGY_TARIFF
+      author: 'Felipe Assis'
+      changes:
+        - sqlFile:
+            path: CREATE_ENERGY_TARIFF.sql
+            relativeToChangelogFile: true
+      rollback:
+        - sqlFile:
+            path: DROP_ENERGY_TARIFF.sql
+            relativeToChangelogFile: true

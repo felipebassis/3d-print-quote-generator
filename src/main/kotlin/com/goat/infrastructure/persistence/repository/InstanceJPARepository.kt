@@ -9,7 +9,7 @@ import jakarta.transaction.Transactional
 import java.time.LocalDateTime
 
 @Singleton
-internal class InstanceRepositoryImpl(
+internal class InstanceJPARepository(
     private val entityManager: EntityManager,
 ) : InstanceRepository {
 
